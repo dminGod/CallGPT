@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyGPT</title>
+
+    <!-- JQuery to make JavaScript a little simpler -->
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap for styling and UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+
+<div class="row">
+    <div class="col-lg-2">
+        <h3><span class="you">My</span><span class="chatgpt">GPT</span></h3>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="" id="status_message">.</div>
+    </div>
+
+    <div class="col-lg-4">
+        <input type="password" id="openai_key" class="form-control" placeholder="API key goes here" />
+    </div>
+</div>
+
+<div class="row">
+    <!-- chat box -->
+    <div class="col-lg-10"><input type="text" id="chat_box" class="form-control" placeholder="Enter text here" /></div>
+    <div class="col-lg-2"> <small class="text-">ctrl + enter <br/> to send the message</small></div>
+</div>
+
+<div class="row">
+
+    <!-- !! Change These topics here !! -->
+    <div class="col-lg-8 topic">
+        <!-- Change the value="xxx" and the label like Golang -->
+        <span><input type="radio" name="topic" value="" checked="checked" /> Nothing  </span>
+        <span><input type="radio" name="topic" value="python" /> Python  </span>
+        <span><input type="radio" name="topic" value="golang" /> Golang </span>
+        <span><input type="radio" name="topic" value="javascript" /> JavaScript </span>
+        <span><input type="radio" name="topic" value="postgres" /> Postgres </span>
+    </div>
+
+    <div class="col-lg-2">
+        <button class="btn btn-primary" id="send_button">Send</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12" id="chat_response">
+
+
+    </div>
+</div>
+
+<!-- The main place where the business logic is written -->
+<script type="text/javascript">
+    // Function to escape HTML characters:
+    const escapeHtml = (unsafe) => {
+        return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+    }
+
+    // ChatGPT API Call:
+    function CallChatGPT() {
+
+        // The chat message and the API key
+        user_request = $("#chat_box").val()
+        api_key = $("#openai_key").val()
+
+        if (api_key.length == 0) {
+
+            $("#status_message").html("Please add an API key")
+        }
+
+        // Get the topic
+        topic = $("input[name='topic']:checked").val()
+
+        // If something is selected, add that in front of the message:
+
+        if (topic.length > 0) {
+
+            // The message will have a prefix, example if you write : how to write a for loop?
+            // and you have selected Python from the radio button
+            // then the message sent to chat GPT will be :
+            // "I am working on, python. How do you write a for loop?"
+            user_request = "I am working on, " + topic + ". Please help me with " + user_request;
+        }
+
+
+        // OpenAI URL:
+        openai_url = "https://api.openai.com/v1/chat/completions"
+
+        // The actual message to send -- you can change this part if you want
+        // as per your liking:
+        msgs = [
+            {
+                "role": "system",
+                "content": "You are a helpful coding assistant and may be sometimes asked other questions."
+            },
+            {   "role": "user",
+                "content": user_request
+            }
+        ]
+
+        // These are other settings to send to OpenAI:
+        send_message = {
+            model : "gpt-3.5-turbo",
+            messages: msgs,
+            // This is how Accurate vs Creative the model will be -- from 0.0 to 1.0
+            // Values below 0.5 will be conservative ( will try to be very exact and accurate, but can get repetitive )
+            // Values above 0.6 will be creative ( said another way, will make up stuff and bullshit )
+            temperature: 0.60,
+        };
+
+        // Success function()
+        // This is the code that will be run after the reply from ChatGPT comes back:
+        success_behavior = function(reply_message){
+
+            console.log("Got a response back from ChatGPT -- the response is:")
+            console.log(reply_message)
+
+            // Actual message from ChatGPT:
+            retMsg = reply_message.choices[0].message.content;
+
+            console.log("before:")
+            console.log(retMsg)
+            retMsg = escapeHtml(retMsg)
+
+            // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
+            retMsg = retMsg.replaceAll(/```(.*?)\n([\s\S]+)```/g, "<br/><br/>\$1 code:<br/><pre class='code'>\$2</pre><br/>");
+
+            console.log("after:")
+            console.log(retMsg)
+
+
+            retMsg = "<br/><br/><span class='chatgpt'>ChatGPT:</span> <br/>" + retMsg + "<br/>";
+
+            // Show the success message
+            $("#status_message").html("<span class='sending'>got reply</span>");
+
+
+            // After 1.5 seconds hide the success message:
+            window.setTimeout(function(){ $("#status_message").html(".");}, 1500);
+
+            $("#chat_response").append(retMsg);
+
+            $("#chat_response").scrollTop($("#chat_response")[0].scrollHeight);
+        };
+        // Success Function end
+
+
+        show_msg = "<br/><br/><span class='you'>You: </span><br/>" + user_request
+
+        $("#chat_response").append(show_msg);
+        $("#chat_response").scrollTop($("#chat_response")[0].scrollHeight);
+
+
+        // This is the actual call to OpenAI
+        $.ajax({
+            type: "POST",
+            url: openai_url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + api_key);
+            },
+            data: JSON.stringify(send_message),
+            success: success_behavior,
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json"
+        });
+    }
+
+    send_request = function(){
+
+        $("#status_message").html("<span class='sending'>Sending message...</span>")
+
+        // The call to ChatGPT is made from this function:
+        CallChatGPT()
+    }
+
+    // Wait for the page to load before we do anything
+    $("document").ready(function() {
+
+        $("#chat_box").keydown(function(e) {
+
+            if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
+                // Send the message
+                console.log("key pressed")
+                send_request();
+            };
+        });
+
+        // If ctrl + enter is pressed and you are not focused on the text box
+        $(document).keypress(function(e) {
+
+            if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
+                // enter pressed
+                send_request();
+            }
+        });
+
+        $(document).keypress(function(e) {
+
+            console.log(e)            
+            if ((e.code == "Slash") && (e.ctrlKey || e.metaKey)) {
+                $("#chat_box").focus();
+            }
+        });
+
+        $("#send_button").click(function(){
+            send_request();
+        })
+    });
+</script>
+
+<!-- Styling -->
+<style type="text/css">
+#openai_key {
+    width: 200px;
+    float: right;
+}
+
+.topic span {
+    width: 200px;
+    padding-right: 15px;
+}
+
+#send_button {
+    float:right;
+    width: 250px;
+}
+
+small {
+    color: #999;
+}
+
+span.chatgpt {
+    color: blueviolet;
+    font-weight: bold;
+}
+
+span.you {
+    color: darkslategray;
+    font-weight: bold;
+}
+
+span.sending {
+    color: darkgreen;
+}
+
+pre.code {
+    color: brown;
+}
+
+pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+div#chat_response {
+    max-height: 750px;
+    overflow-y: scroll;
+}
+
+</style>
+
+</div>
+</body>
+</html>
