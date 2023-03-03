@@ -65,7 +65,6 @@
 <div class="row">
     <div class="col-lg-12" id="chat_response">
 
-
     </div>
 </div>
 
@@ -140,7 +139,6 @@
             }
         ]
 
-
         temprature = $("#gpt_temprature").val()
         // convert it to a float:
         temprature = parseFloat(temprature)
@@ -169,15 +167,15 @@
             // Actual message from ChatGPT:
             retMsg = reply_message.choices[0].message.content;
 
-            console.log("before:")
-            console.log(retMsg)
             retMsg = escapeHtml(retMsg)
 
             // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
-            retMsg = retMsg.replaceAll(/```(.*?)\n([\s\S]+)```/g, "<br/><br/>\$1 code:<br/><pre class='code'>\$2</pre><br/>");
+            // TODO: This thing is not working properly, need to fix it:
+            retMsg = retMsg.replaceAll(/```([\s\S]+)```/g, "<br/><pre class='code'>\$1</pre><br/>");
 
-            console.log("after:")
-            console.log(retMsg)
+
+            // TODO: The \n is not working properly, need to fix it:
+            retMsg = retMsg.replaceAll("\n", "<br/>");
 
 
             retMsg = "<br/><br/><span class='chatgpt'>ChatGPT:</span> <br/>" + retMsg + "<br/>";
@@ -250,7 +248,6 @@
         })
     });
 </script>
-
 
 
 <!-- Styling -->
