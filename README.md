@@ -43,6 +43,11 @@ There are 2 very simple examples of custom code examples shown of how you can ha
 1. Change the background color of the page --> you can say "change background to red" and the background will change to red.
 2. Change the text to white and it will change the text to white.
 
+
+<video src='https://raw.githubusercontent.com/dminGod/CallGPT/main/callGPT.mov' />
+
+
+
 To add more capabilities to the Bot:
 - Write a new function that does what you want.
 - In the bot initialization there is a list of commands that the bot can execute, the parameters it takes and when the function is called -- add your function to this list.
@@ -50,6 +55,10 @@ To add more capabilities to the Bot:
 
 You can add stuff like calling the HackerNews API and showing it on the screen somewhere or call some local API to 
 control the lights or toaster or whatever you want.
+
+
+
+
 
 ## 📝💪🏼 Write your own features:
 
@@ -69,4 +78,7 @@ control the lights or toaster or whatever you want.
 
 ## Tweak it to your liking:
 <img src="./image-v3.png" />
+
+
+
 
