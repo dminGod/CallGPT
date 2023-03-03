@@ -44,8 +44,7 @@ There are 2 very simple examples of custom code examples shown of how you can ha
 2. Change the text to white and it will change the text to white.
 
 
-https://raw.githubusercontent.com/dminGod/CallGPT/main/callGPT.mov
-
+<video src='https://raw.githubusercontent.com/dminGod/CallGPT/main/callGPT.mov' />
 
 
 
