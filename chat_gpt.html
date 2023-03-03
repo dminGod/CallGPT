@@ -10,6 +10,9 @@
     <!-- Bootstrap for styling and UI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+
+
+
 </head>
 <body>
 <div class="container">
@@ -40,10 +43,11 @@
     <div class="col-lg-8 topic">
         <!-- Change the value="xxx" and the label like Golang -->
         <span><input type="radio" name="topic" value="" checked="checked" /> Nothing  </span>
-        <span><input type="radio" name="topic" value="python" /> Python  </span>
-        <span><input type="radio" name="topic" value="golang" /> Golang </span>
-        <span><input type="radio" name="topic" value="javascript" /> JavaScript </span>
-        <span><input type="radio" name="topic" value="postgres" /> Postgres </span>
+        <span><input type="radio" name="topic" data="other" custom_prefix="Give a quotation related to " value="inspirational_quote" /> Quote  </span>
+        <span><input type="radio" name="topic" data="technology" value="python" /> Python  </span>
+        <span><input type="radio" name="topic" data="technology" value="golang" /> Golang </span>
+        <span><input type="radio" name="topic" data="technology" value="javascript" /> JavaScript </span>
+        <span><input type="radio" name="topic" data="technology" value="postgres" /> Postgres </span>
     </div>
 
     <div class="col-lg-2">
@@ -84,11 +88,27 @@
 
         if (topic.length > 0) {
 
+            // 👇🏼👇🏼👇🏼 Change this code if you want
             // The message will have a prefix, example if you write : how to write a for loop?
             // and you have selected Python from the radio button
             // then the message sent to chat GPT will be :
             // "I am working on, python. How do you write a for loop?"
-            user_request = "I am working on, " + topic + ". Please help me with " + user_request;
+
+            // What
+            topic_type = $("input[name='topic']:checked").attr("data")
+
+            // Is there a custom prefix statement?
+            custom_prefix = $("input[name='topic']:checked").attr("custom_prefix")
+
+            // If there is a custom prefix, then use that:
+            if ( custom_prefix.length > 0 ) {
+                user_request = custom_prefix + user_request;
+
+            // If this is just a technology topic, use this common pattern:
+            } else if (data == "technology") {
+
+                    user_request = "I am working on, " + topic + ". Please help me with " + user_request;
+            }
         }
 
 
@@ -185,17 +205,9 @@
     // Wait for the page to load before we do anything
     $("document").ready(function() {
 
-        $("#chat_box").keydown(function(e) {
-
-            if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
-                // Send the message
-                console.log("key pressed")
-                send_request();
-            };
-        });
-
         // If ctrl + enter is pressed and you are not focused on the text box
         $(document).keypress(function(e) {
+
 
             if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
                 // enter pressed
@@ -205,7 +217,7 @@
 
         $(document).keypress(function(e) {
 
-            console.log(e)            
+            console.log(e)
             if ((e.code == "Slash") && (e.ctrlKey || e.metaKey)) {
                 $("#chat_box").focus();
             }
