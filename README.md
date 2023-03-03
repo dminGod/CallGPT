@@ -29,7 +29,7 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 
 3. Get an API key from OpenAI for ChatGPT ( from their website )
 
-4. Put your key in the HTML file and use.
+4. Put your API Key in the field in the top corner and make the calls.
 
 5. Modify the HTML file as you like.
 
