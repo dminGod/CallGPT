@@ -64,6 +64,7 @@
 
 <!-- The main place where the business logic is written -->
 <script type="text/javascript">
+
     // Function to escape HTML characters:
     const escapeHtml = (unsafe) => {
         return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
@@ -78,7 +79,12 @@
 
         if (api_key.length == 0) {
 
-            $("#status_message").html("Please add an API key")
+            // Show error:
+            $("#status_message").css("color", "red").html("Please add an API key 👉🏼")
+
+            // Change the style back after 3 seconds:
+            setTimeout(function(){ $("#status_message").css("color", "black"); $("#status_message").html(".") }, 4000)
+            return;
         }
 
         // Get the topic
@@ -228,6 +234,8 @@
         })
     });
 </script>
+
+
 
 <!-- Styling -->
 <style type="text/css">
