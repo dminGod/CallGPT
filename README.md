@@ -51,6 +51,22 @@ To add more capabilities to the Bot:
 You can add stuff like calling the HackerNews API and showing it on the screen somewhere or call some local API to 
 control the lights or toaster or whatever you want.
 
+## 📝💪🏼 Write your own features:
+
+1. Define the function that will do the work. For example:
+<img src="custom_bot_v1.png" /> <br/>
+
+
+2. Add a keyword that the bot can use to call this function
+
+<img src="custom_bot_v2.png" /> <br/>
+
+3. When you get a reply from the bot, see if any of your keywords is called, if yes, call your function:
+
+<img src="custom_bot_v3.png" /> <br/>
+
+
+
 ## Tweak it to your liking:
 <img src="./image-v3.png" />
 
