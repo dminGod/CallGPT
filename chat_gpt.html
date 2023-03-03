@@ -33,8 +33,15 @@
 
 <div class="row">
     <!-- chat box -->
-    <div class="col-lg-10"><input type="text" id="chat_box" class="form-control" placeholder="Enter text here" /></div>
-    <div class="col-lg-2"> <small class="text-">ctrl + enter <br/> to send the message</small></div>
+    <div class="col-lg-10">
+        <input type="text" id="chat_box" class="form-control" placeholder="Enter text here" />
+        <small class="text-">ctrl + enter to send the message</small>
+    </div>
+    <div class="col-lg-2">
+        Temprature: <span id="gpt_temprature_value">0.5</span> <br/>
+        <input type="range" class="form-range" min="0" max="1" step="0.05" id="gpt_temprature">
+        <small class="text-">higher = more creative</small>
+    </div>
 </div>
 
 <div class="row">
@@ -133,6 +140,15 @@
             }
         ]
 
+
+        temprature = $("#gpt_temprature").val()
+        // convert it to a float:
+        temprature = parseFloat(temprature)
+
+        if (temprature.length == 0 || temprature == 0) {
+            temprature = 0.6
+        }
+
         // These are other settings to send to OpenAI:
         send_message = {
             model : "gpt-3.5-turbo",
@@ -140,7 +156,7 @@
             // This is how Accurate vs Creative the model will be -- from 0.0 to 1.0
             // Values below 0.5 will be conservative ( will try to be very exact and accurate, but can get repetitive )
             // Values above 0.6 will be creative ( said another way, will make up stuff and bullshit )
-            temperature: 0.60,
+            temperature: temprature,
         };
 
         // Success function()
@@ -211,6 +227,13 @@
     // Wait for the page to load before we do anything
     $("document").ready(function() {
 
+        $("#gpt_temprature_value").html($("#gpt_temprature").val())
+
+
+        $("#gpt_temprature").on("change", function(){
+            $("#gpt_temprature_value").html($("#gpt_temprature").val())
+        })
+
         // If ctrl + enter is pressed and you are not focused on the text box
         $(document).keypress(function(e) {
 
@@ -221,13 +244,6 @@
             }
         });
 
-        $(document).keypress(function(e) {
-
-            console.log(e)
-            if ((e.code == "Slash") && (e.ctrlKey || e.metaKey)) {
-                $("#chat_box").focus();
-            }
-        });
 
         $("#send_button").click(function(){
             send_request();
@@ -256,6 +272,7 @@
 
 small {
     color: #999;
+    font-size: 10px;
 }
 
 span.chatgpt {
