@@ -1,7 +1,7 @@
-# CallGPT
+# ☎ CallGPT
 A dead simple way to call the ChatGPT API from your machine
 
-## What is this?
+## 👀 What is this?
 
 This is a dead simple way to have a ChatGPT client that you have control over and that you can actually use without having to go to any website
 
@@ -21,7 +21,7 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 <img src="./image-v2.png" />
 
 
-## How to use:
+## 🤔 How to use:
 
 1. Download this repo and save the HTML file on any location on your PC.
 
@@ -36,7 +36,21 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 6. Enjoy! 🙂
 
 
-## Tweak it to your liking:
+## ⭐🤖🏃 Custom assistant:
 
+There are 2 very simple examples of custom code examples shown of how you can have the bot execute some functions for you.
+
+1. Change the background color of the page --> you can say "change background to red" and the background will change to red.
+2. Change the text to white and it will change the text to white.
+
+To add more capabilities to the Bot:
+- Write a new function that does what you want.
+- In the bot initialization there is a list of commands that the bot can execute, the parameters it takes and when the function is called -- add your function to this list.
+- There is a part of the response message parsing where we check if there are any commands sent by the bot for us to execute -- here we make the call to the function we made.
+
+You can add stuff like calling the HackerNews API and showing it on the screen somewhere or call some local API to 
+control the lights or toaster or whatever you want.
+
+## Tweak it to your liking:
 <img src="./image-v3.png" />
 

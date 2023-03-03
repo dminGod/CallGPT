@@ -68,6 +68,26 @@
     </div>
 </div>
 
+
+<!-- Custom behavior you want to call upon -->
+<script type="text/javascript">
+
+// Change the background:
+function myCustomBgFunction(color) {
+
+    console.log("Got request to change the color: ", color)
+    $("body").css("background-color", color);
+}
+
+// Change the text color:
+function myCustomTextFunction(color) {
+    console.log("Got request to change the text color: ", color)
+    $("body").css("color", color);
+}
+
+</script>
+
+
 <!-- The main place where the business logic is written -->
 <script type="text/javascript">
 
@@ -123,7 +143,6 @@
             }
         }
 
-
         // OpenAI URL:
         openai_url = "https://api.openai.com/v1/chat/completions"
 
@@ -132,7 +151,15 @@
         msgs = [
             {
                 "role": "system",
-                "content": "You are a helpful coding assistant and may be sometimes asked other questions."
+                "content": `You are a helpful coding assistant and may be sometimes asked other questions and given tasks.
+                For the tasks you have a list of functions you can call (given below)
+                - To call a function, reply with ___<function name>(<parameters>) in a separate line
+                - Please try to fulfil the request immediately rather than ask for more information
+
+                List:
+                ___changeBackground(<html color name>)   --  Change the background color of the page, use values valid for jquery css in the parameter
+                ___changeTextColor(<html color name>)    --  Change the text color, use values valid for jquery css
+                `
             },
             {   "role": "user",
                 "content": user_request
@@ -168,6 +195,35 @@
             retMsg = reply_message.choices[0].message.content;
 
             retMsg = escapeHtml(retMsg)
+
+            single_lines = reply_message.choices[0].message.content.split("\n")
+
+            // Give additional capability to the bot -- very simple example of changing the page background and changeing the text color
+            // Loop over all the lines:
+            for (var i = 0; i < single_lines.length; i++) {
+
+                // If the line starts with __changeBackground, then change the background color:
+                if (single_lines[i].startsWith("___")) {
+
+                    if (single_lines[i].startsWith("___changeBackground")) {
+                        // Get the color:
+                        color = single_lines[i].split("(")[1].split(")")[0]
+                        color = color.replaceAll('"', '')
+
+                        // Call the custom function:
+                        myCustomBgFunction(color)
+                    }
+
+                    if (single_lines[i].startsWith("___changeText")) {
+                        // Get the color:
+                        color = single_lines[i].split("(")[1].split(")")[0]
+                        color = color.replaceAll('"', '')
+
+                        // Call the custom function:
+                        myCustomTextFunction(color)
+                    }
+                }
+            }
 
             // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
             // TODO: This thing is not working properly, need to fix it:
