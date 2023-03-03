@@ -130,14 +130,14 @@ function myCustomTextFunction(color) {
             topic_type = $("input[name='topic']:checked").attr("data")
 
             // Is there a custom prefix statement?
-            custom_prefix = $("input[name='topic']:checked").attr("custom_prefix")
+            custom_prefix = $("input[name='topic']:checked").attr("custom_prefix") ? $("input[name='topic']:checked").attr("custom_prefix") : "";
 
             // If there is a custom prefix, then use that:
             if ( custom_prefix.length > 0 ) {
                 user_request = custom_prefix + user_request;
 
             // If this is just a technology topic, use this common pattern:
-            } else if (data == "technology") {
+            } else if (topic_type == "technology") {
 
                     user_request = "I am working on, " + topic + ". Please help me with " + user_request;
             }
