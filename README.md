@@ -5,7 +5,7 @@ A dead simple way to call the ChatGPT API from your machine
 
 This is a dead simple way to have a ChatGPT client that you have control over and that you can actually use without having to go to any website
 
-- Its just 1 html ~300 lines HTML file that you can save on your desktop or anywhere else and have an interface where you can interact with ChatGPT.
+- Its just 1 html that you can save on your desktop or anywhere else and have an interface where you can interact with ChatGPT.
 
 - Except for loading jQuery and Bootstap from a CDN -- there are no services involved. You can download these 2 libraries on your local and work with that if you prefer.
 
@@ -18,7 +18,7 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 <br/>
 
 
-<img src="./image-v2.png" />
+<img src="./readme_media/img-v4.jpg" />
 
 
 ## 🤔 How to use:
@@ -68,16 +68,16 @@ control the lights or toaster or whatever you want.
 
 2. Add a keyword that the bot can use to call this function
 
-<img src="custom_bot_v2.png" /> <br/>
+<img src="readme_media/custom_bot_v2.png" /> <br/>
 
 3. When you get a reply from the bot, see if any of your keywords is called, if yes, call your function:
 
-<img src="custom_bot_v3.png" /> <br/>
+<img src="readme_media/custom_bot_v3.png" /> <br/>
 
 
 
 ## Tweak it to your liking:
-<img src="./image-v3.png" />
+<img src="readme_media/image-v3.png" />
 
 
 

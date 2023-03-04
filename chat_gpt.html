@@ -11,90 +11,233 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
 
-
-
 </head>
 <body>
+
+<!-- Page Container div - start -->
 <div class="container">
 
-<div class="row">
+<!-- Top header start -->
+<div class="row top-header">
     <div class="col-lg-2">
-        <h3><span class="you">My</span><span class="chatgpt">GPT</span></h3>
+        <h3><span class="you">☎ Call</span><span class="chatgpt">GPT</span></h3>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-5 top_menu">
+        <!-- <span class="menu_item">Settings</span> -->
+    </div>
+
+    <div class="col-lg-4 status_message">
         <div class="" id="status_message">.</div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-2">
         <input type="password" id="openai_key" class="form-control" placeholder="API key goes here" />
     </div>
 </div>
+<!-- Top header end -->
 
-<div class="row">
-    <!-- chat box -->
-    <div class="col-lg-10">
-        <input type="text" id="chat_box" class="form-control" placeholder="Enter text here" />
-        <small class="text-">ctrl + enter to send the message</small>
-    </div>
-    <div class="col-lg-2">
-        Temprature: <span id="gpt_temprature_value">0.5</span> <br/>
-        <input type="range" class="form-range" min="0" max="1" step="0.05" id="gpt_temprature">
-        <small class="text-">higher = more creative</small>
-    </div>
-</div>
+
 
 <div class="row">
 
-    <!-- !! Change These topics here !! -->
-    <div class="col-lg-8 topic">
-        <!-- Change the value="xxx" and the label like Golang -->
-        <span><input type="radio" name="topic" value="" checked="checked" /> Nothing  </span>
-        <span><input type="radio" name="topic" data="other" custom_prefix="Give a quotation related to " value="inspirational_quote" /> Quote  </span>
-        <span><input type="radio" name="topic" data="technology" value="python" /> Python  </span>
-        <span><input type="radio" name="topic" data="technology" value="golang" /> Golang </span>
-        <span><input type="radio" name="topic" data="technology" value="javascript" /> JavaScript </span>
-        <span><input type="radio" name="topic" data="technology" value="postgres" /> Postgres </span>
+    <!-- Left Section, Chatbox, tech selection, send button - start -->
+    <div class="col-lg-9">
+        <input type="text" id="chat_box" class="form-control" placeholder="Enter text here -- ctrl/command + enter to send the message" />
+
+        <div class="row tech_selection">
+            <div class="col-lg-9 topic">
+                <!-- Change the value="xxx" and the label like Golang -->
+                <span><input type="radio" name="topic" value="" checked="checked" /> Nothing  </span>
+                <span><input type="radio" name="topic" data="other" custom_prefix="Give a quotation related to " value="inspirational_quote" /> Quote  </span>
+                <span><input type="radio" name="topic" data="technology" value="python" /> Python  </span>
+                <span><input type="radio" name="topic" data="technology" value="golang" /> Golang </span>
+                <span><input type="radio" name="topic" data="technology" value="regular expressions" /> RegEx </span>
+                <span><input type="radio" name="topic" data="technology" value="javascript" /> JavaScript </span>
+                <span><input type="radio" name="topic" data="technology" value="postgres" /> Postgres </span>
+                <!-- Change the value="xxx" and the label like Golang -->
+                <br/>
+                <small class="text pull_left"> 💡 You can just change this 👆🏻 in the HTML to suit your stack</small>
+            </div>
+
+            <div class="col-lg-3">
+                <button class="btn btn-primary" id="send_button">Send</button>
+            </div>
+
+            <!-- Chat box - start -->
+            <div class="row">
+                <div class="col-lg-12" id="chat_response"></div>
+            </div>
+            <!-- Chat box - end -->
+
+        </div>
     </div>
+    <!-- Left Section, Chatbox, tech selection, send button - end -->
 
-    <div class="col-lg-2">
-        <button class="btn btn-primary" id="send_button">Send</button>
+    <!-- Right Section, Settings and Usage stats - start -->
+    <div class="col-lg-3 right_section">
+
+        <!-- API Related Settings - start-->
+        <div class="api_settings right_panel">
+            <h6>API Settings:</h6>
+
+            <div class="right_single_setting">
+                Model Name: <br/>
+                <select id="model_name">
+                    <option value="gpt-3.5-turbo">GPT 3.5 Turbo</option>
+                    <option value="gpt-3.5-turbo-0301">GPT 3.5 Turbo-0301</option>
+                </select>
+                    <br/>
+            </div>
+
+            <div class="right_single_setting">
+                Temprature: <span id="gpt_temprature_value">0.5</span> <small class="text pull_right">higher = more creative</small> <br/>
+                <input type="range" class="form-range" min="0" max="1" step="0.05" id="gpt_temprature">
+            </div>
+
+            <div class="right_single_setting">
+                Number of responses: <span id="n_gens">1</span> <small class="text pull_right">How many replies</small> <br/>
+                <input type="range" class="form-range" min="1" max="5" step="1" id="num_gens" value="1" />
+            </div>
+
+            <div class="right_single_setting">
+                <input type="checkbox" id="enable_max_tokens" /> Max Tokens: <span id="max_tokens">1</span> <small class="text pull_right">Max response tokens</small> <br/>
+                <input type="range" class="form-range" min="1" max="4096" step="10" id="num_tokens" value="4096" />
+            </div>
+        </div>
+        <!-- API Related Settings - end-->
+
+
+        <!-- API Usage - start-->
+        <div class="usage_reference right_panel">
+            <h6>API Usage:</h6>
+            <b>Last Call:</b> <br/>
+
+            <span class="token_count_labels">Time taken: </span>        <span id="last_time_taken">0</span>       <br/>
+
+            <span class="token_count_labels">Prompt tokens: </span>        <span id="prompt_tokens">0</span>       <br/>
+            <span class="token_count_labels">Completion tokens: </span>    <span id="completion_tokens">0</span>   <br/>
+            <span class="token_count_labels"><b>Last call total:</b> </span>  <span id="total_tokens">0</span>     <br/>
+            <hr/>
+
+            <b>This Session:</b> <br/>
+
+            <span class="token_count_labels">Avg response time: </span>        <span id="avg_time_taken">0</span>       <br/>
+
+            <span class="token_count_labels">Prompt tokens: </span>            <span id="total_prompt_tokens">0</span> <br/>
+            <span class="token_count_labels">Completion tokens: </span>        <span id="total_completion_tokens">0</span> <br/>
+            <span class="token_count_labels"><b>Session total : </b></span>    <span id="total_session_tokens">0</span> </b> <br/>
+        </div>
+        <!-- API Usage - end -->
+
     </div>
-</div>
-
-<div class="row">
-    <div class="col-lg-12" id="chat_response">
-
-    </div>
-</div>
+        <!-- Right Section, Settings and Usage stats - end -->
 
 
-<!-- Custom behavior you want to call upon -->
+</div><!-- row div - end -->
+
+</div> <!-- Page Container div - end -->
+
+
+
+<!---
+--------------------------------------------------------------
+Custom JavaScript functions
+--------------------------------------------------------------
+-->
 <script type="text/javascript">
 
-// Change the background:
-function myCustomBgFunction(color) {
+    // Change the background:
+    function myCustomBgFunction(color) {
+        console.log("Got request to change the color: ", color)
+        $("body").css("background-color", color);
+    }
 
-    console.log("Got request to change the color: ", color)
-    $("body").css("background-color", color);
-}
-
-// Change the text color:
-function myCustomTextFunction(color) {
-    console.log("Got request to change the text color: ", color)
-    $("body").css("color", color);
-}
-
+    // Change the text color:
+    function myCustomTextFunction(color) {
+        console.log("Got request to change the text color: ", color)
+        $("body").css("color", color);
+    }
 </script>
 
 
-<!-- The main place where the business logic is written -->
+
+<!---
+--------------------------------------------------------------
+Business logic of the app:
+--------------------------------------------------------------
+-->
+
 <script type="text/javascript">
 
     // Function to escape HTML characters:
     const escapeHtml = (unsafe) => {
         return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
     }
+
+    // Common function to show the time next to the chat message:
+    function getCurrentTime() {
+        let now = new Date();
+        let hours = now.getHours().toString().padStart(2, '0');
+        let minutes = now.getMinutes().toString().padStart(2, '0');
+        let seconds = now.getSeconds().toString().padStart(2, '0');
+        return hours + ':' + minutes + ':' + seconds;
+    }
+
+
+    // This function converts a single response from ChatGPT to HTML format:
+    formatResponse = (retMsg) => {
+
+        retMsg = escapeHtml(retMsg)
+        single_lines = retMsg.split("\n")
+
+        // Give additional capability to the bot -- very simple example of changing the page background and changeing the text color
+        // Loop over all the lines:
+        for (var i = 0; i < single_lines.length; i++) {
+
+            // If the line starts with __changeBackground, then change the background color:
+            if (single_lines[i].startsWith("___")) {
+
+                if (single_lines[i].startsWith("___changeBackground")) {
+                    // Get the color:
+                    color = single_lines[i].split("(")[1].split(")")[0]
+                    color = color.replaceAll('"', '')
+
+                    // Call the custom function:
+                    myCustomBgFunction(color)
+                }
+
+                if (single_lines[i].startsWith("___changeText")) {
+                    // Get the color:
+                    color = single_lines[i].split("(")[1].split(")")[0]
+                    color = color.replaceAll('"', '')
+
+                    // Call the custom function:
+                    myCustomTextFunction(color)
+                }
+            }
+        }
+
+        // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
+        // TODO: This thing is not working properly, need to fix it:
+        retMsg = retMsg.replaceAll(/```([\s\S]+)```/g, "<br/><pre class='code'>\$1</pre><br/>");
+
+        // TODO: The \n is not working properly, need to fix it:
+        retMsg = retMsg.replaceAll("\n", "<br/>");
+
+        curTime = getCurrentTime();
+        retMsg = `<br/><br/><span class='chatgpt'>ChatGPT:</span><small>${curTime}</small> <br/>` + retMsg + "<br/>";
+
+        return retMsg
+    }
+
+
+    session_total_prompt_tokens = 0
+    session_total_completion_tokens = 0
+    session_total_tokens = 0
+    session_time_taken_secs = 0
+    session_calls_done = 0
+    session_avg_time_taken = 0
 
     // ChatGPT API Call:
     function CallChatGPT() {
@@ -136,10 +279,10 @@ function myCustomTextFunction(color) {
             if ( custom_prefix.length > 0 ) {
                 user_request = custom_prefix + user_request;
 
-            // If this is just a technology topic, use this common pattern:
+                // If this is just a technology topic, use this common pattern:
             } else if (topic_type == "technology") {
 
-                    user_request = "I am working on, " + topic + ". Please help me with " + user_request;
+                user_request = "I am working on, " + topic + ". Please help me with " + user_request;
             }
         }
 
@@ -151,6 +294,7 @@ function myCustomTextFunction(color) {
         msgs = [
             {
                 "role": "system",
+                // You can change this part to be whatever you want it to be 👇🏻
                 "content": `You are a helpful coding assistant and may be sometimes asked other questions and given tasks.
                 For the tasks you have a list of functions you can call (given below)
                 - To call a function, reply with ___<function name>(<parameters>) in a separate line
@@ -161,100 +305,107 @@ function myCustomTextFunction(color) {
                 ___changeTextColor(<html color name>)    --  Change the text color, use values valid for jquery css
                 `
             },
-            {   "role": "user",
+            {
+                "role": "user",
                 "content": user_request
             }
         ]
 
+        // Get the temprature value from the slider -- if not defined, set it to 0.6
         temprature = $("#gpt_temprature").val()
         // convert it to a float:
         temprature = parseFloat(temprature)
 
-        if (temprature.length == 0 || temprature == 0) {
+        if (temprature.length === 0 || temprature === 0) {
             temprature = 0.6
+        }
+
+        // If the model name is set, use that:
+        model_name = $("#model_name").val()
+
+        // Something should be set and it should be one of the valid model names, otehrwise use the default:
+        if (model_name.length === 0 || ( model_name !== "gpt-3.5-turbo" && model_name !== "gpt-3.5-turbo-0301" ) ) {
+            model_name = "gpt-3.5-turbo"
+        }
+
+        // Number of responses to generate:
+        num_responses = parseInt($("#num_gens").val())
+
+        if (num_responses.length === 0 || num_responses === 0) {
+            num_responses = 1
         }
 
         // These are other settings to send to OpenAI:
         send_message = {
-            model : "gpt-3.5-turbo",
+            model : model_name,
             messages: msgs,
-            // This is how Accurate vs Creative the model will be -- from 0.0 to 1.0
-            // Values below 0.5 will be conservative ( will try to be very exact and accurate, but can get repetitive )
-            // Values above 0.6 will be creative ( said another way, will make up stuff and bullshit )
             temperature: temprature,
+            n: num_responses,
         };
+
+        // If #enable_max_tokens is checked, then use the value for max_tokens:
+        if ($("#enable_max_tokens").is(":checked")) {
+
+            // Get the value:
+            max_tokens = $("#max_tokens").val()
+
+            // If the value is not set, then set it to 100:
+            if (max_tokens.length === 0 || max_tokens === 0) {
+                max_tokens = 2000
+            }
+
+            // Add the max_tokens to the send_message:
+            send_message["max_tokens"] = max_tokens
+        }
 
         // Success function()
         // This is the code that will be run after the reply from ChatGPT comes back:
-        success_behavior = function(reply_message){
+        success_behavior = function(reply_message) {
 
             console.log("Got a response back from ChatGPT -- the response is:")
             console.log(reply_message)
 
+            retMsg = ""
+
             // Actual message from ChatGPT:
-            retMsg = reply_message.choices[0].message.content;
+            for (i=0; i < reply_message.choices.length; i++) {
 
-            retMsg = escapeHtml(retMsg)
+                curMsg = reply_message.choices[i].message.content;
+                // $("#status_message").html("<span class='sending'>got reply</span>");
+                curMsg = formatResponse(curMsg)
 
-            single_lines = reply_message.choices[0].message.content.split("\n")
+                retMsg += curMsg
 
-            // Give additional capability to the bot -- very simple example of changing the page background and changeing the text color
-            // Loop over all the lines:
-            for (var i = 0; i < single_lines.length; i++) {
-
-                // If the line starts with __changeBackground, then change the background color:
-                if (single_lines[i].startsWith("___")) {
-
-                    if (single_lines[i].startsWith("___changeBackground")) {
-                        // Get the color:
-                        color = single_lines[i].split("(")[1].split(")")[0]
-                        color = color.replaceAll('"', '')
-
-                        // Call the custom function:
-                        myCustomBgFunction(color)
-                    }
-
-                    if (single_lines[i].startsWith("___changeText")) {
-                        // Get the color:
-                        color = single_lines[i].split("(")[1].split(")")[0]
-                        color = color.replaceAll('"', '')
-
-                        // Call the custom function:
-                        myCustomTextFunction(color)
-                    }
-                }
+                $("#status_message").append("<span class='sending'>got reply</span>");
             }
-
-            // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
-            // TODO: This thing is not working properly, need to fix it:
-            retMsg = retMsg.replaceAll(/```([\s\S]+)```/g, "<br/><pre class='code'>\$1</pre><br/>");
-
-
-            // TODO: The \n is not working properly, need to fix it:
-            retMsg = retMsg.replaceAll("\n", "<br/>");
-
-
-            retMsg = "<br/><br/><span class='chatgpt'>ChatGPT:</span> <br/>" + retMsg + "<br/>";
-
-            // Show the success message
-            $("#status_message").html("<span class='sending'>got reply</span>");
-
 
             // After 1.5 seconds hide the success message:
             window.setTimeout(function(){ $("#status_message").html(".");}, 1500);
 
             $("#chat_response").append(retMsg);
-
             $("#chat_response").scrollTop($("#chat_response")[0].scrollHeight);
+
+            $("#prompt_tokens").html(reply_message.usage.completion_tokens);
+            $("#completion_tokens").html(reply_message.usage.prompt_tokens);
+            $("#total_tokens").html(reply_message.usage.total_tokens);
+
+            session_total_completion_tokens += reply_message.usage.completion_tokens;
+            session_total_prompt_tokens += reply_message.usage.prompt_tokens;
+            session_total_tokens += reply_message.usage.total_tokens;
+
+            $("#total_prompt_tokens").html(session_total_completion_tokens);
+            $("#total_completion_tokens").html(session_total_prompt_tokens);
+            $("#total_session_tokens").html(session_total_tokens);
         };
-        // Success Function end
 
-
-        show_msg = "<br/><br/><span class='you'>You: </span><br/>" + user_request
+        curTime = getCurrentTime();
+        show_msg = `<br/><br/><span class='you'>You: </span> <small>${curTime}</small><br/>` + user_request
 
         $("#chat_response").append(show_msg);
         $("#chat_response").scrollTop($("#chat_response")[0].scrollHeight);
 
+
+        var ajaxTime= new Date().getTime();
 
         // This is the actual call to OpenAI
         $.ajax({
@@ -267,7 +418,28 @@ function myCustomTextFunction(color) {
             success: success_behavior,
             contentType: 'application/json; charset=utf-8',
             dataType: "json"
-        });
+        }).done(function(data) {
+
+            secs = ((new Date().getTime() - ajaxTime)/1000).toFixed(2);
+
+            session_time_taken_secs += parseFloat(secs);
+            session_calls_done += 1;
+
+            session_avg_time_taken = (session_time_taken_secs / session_calls_done).toFixed(2);
+
+            $("#last_time_taken").html(secs + " sec");
+            $("#avg_time_taken").html(session_avg_time_taken + " sec");
+
+
+        }).fail(function(data) {
+
+            $("#status_message").css("color", "red").html("Error with previous request. Please check the logs or try again.");
+            console.log(data);
+
+            setTimeout(function() {
+                $("#status_message").css("color", "black").html(".");
+            }, 3000);
+        })
     }
 
     send_request = function(){
@@ -282,15 +454,25 @@ function myCustomTextFunction(color) {
     $("document").ready(function() {
 
         $("#gpt_temprature_value").html($("#gpt_temprature").val())
+        $("#n_gens").html($("#num_gens").val())
+        $("#max_tokens").html($("#num_tokens").val())
 
 
-        $("#gpt_temprature").on("change", function(){
+        $("#gpt_temprature").on("change", function() {
             $("#gpt_temprature_value").html($("#gpt_temprature").val())
         })
 
+        $("#num_gens").on("change", function() {
+            $("#n_gens").html($("#num_gens").val())
+        })
+
+        $("#num_tokens").on("change", function() {
+            $("#max_tokens").html($("#num_tokens").val())
+        })
+
+
         // If ctrl + enter is pressed and you are not focused on the text box
         $(document).keypress(function(e) {
-
 
             if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
                 // enter pressed
@@ -306,61 +488,122 @@ function myCustomTextFunction(color) {
 </script>
 
 
+
+
 <!-- Styling -->
-<style type="text/css">
-#openai_key {
-    width: 200px;
-    float: right;
-}
 
-.topic span {
-    width: 200px;
-    padding-right: 15px;
-}
+<style>
 
-#send_button {
-    float:right;
-    width: 250px;
-}
+    div.top-header{
+        padding-top : 10px;
+        padding-bottom: 10px;
+    }
 
-small {
-    color: #999;
-    font-size: 10px;
-}
+    span.menu_item {
+        Background-color: lightgray;
+        padding: 3px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-span.chatgpt {
-    color: blueviolet;
-    font-weight: bold;
-}
+    span.menu_item:hover {
+        Background-color: maroon;
+        color: lightgray;
+        padding: 3px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
 
-span.you {
-    color: darkslategray;
-    font-weight: bold;
-}
+    div.status_message {
+        border-radius: 15px;
+        border: thin solid #eeeeee;
+        padding: 5px;
+        max-width: 250px;
+    }
 
-span.sending {
-    color: darkgreen;
-}
+    div.tech_selection {
+        padding-top : 10px;
+    }
 
-pre.code {
-    color: brown;
-}
+    small.pull_right {
+        float: right;
+    }
 
-pre {
-    white-space: pre-wrap;       /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-    white-space: -pre-wrap;      /* Opera 4-6 */
-    white-space: -o-pre-wrap;    /* Opera 7 */
-    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-}
+    div.right_single_setting {
+        margin-bottom: 10px;
+        margin-top: 5px;
+        padding: 5px;
+    }
 
-div#chat_response {
-    max-height: 750px;
-    overflow-y: scroll;
-}
+    h6 {
+        background-color: darkslategray;
+        border-radius: 10px 10px 0px 0px;
+        padding: 5px;
+        color: #eeeeee;
+    }
 
+    div.right_panel {
+        padding: 5px;
+        border: thin solid #eeeeee;
+        border-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    span.token_count_labels {
+        min-width: 150px;
+        display: inline-block;
+    }
+
+    #openai_key {
+        width: 200px;
+        float: right;
+    }
+
+    .topic span {
+        width: 200px;
+        padding-right: 15px;
+    }
+
+    #send_button {
+        float:right;
+
+    }
+
+    small {
+        color: #999;
+        font-size: 10px;
+    }
+
+    span.chatgpt {
+        color: blueviolet;
+        font-weight: bold;
+    }
+
+    span.you {
+        color: brown;
+        font-weight: bold;
+    }
+
+    span.sending {
+        color: darkgreen;
+    }
+
+    pre.code {
+        color: brown;
+    }
+
+    pre {
+        white-space: pre-wrap;       /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    }
+
+    div#chat_response {
+        max-height: 750px;
+        overflow-y: scroll;
+    }
 </style>
-
-</div>
 </body>
 </html>
