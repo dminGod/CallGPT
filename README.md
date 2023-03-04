@@ -1,6 +1,8 @@
 # ☎ CallGPT
 A dead simple way to call the ChatGPT API from your machine
 
+Try the client directly --> https://dmingod.github.io/CallGPT/chat_gpt.html
+
 ## 👀 What is this?
 
 This is a dead simple way to have a ChatGPT client that you have control over and that you can actually use without having to go to any website
