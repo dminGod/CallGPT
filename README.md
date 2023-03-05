@@ -22,7 +22,7 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 
 ## Show me the goods:
 
-**Search and results using Chat:**
+**Chat and responses:**
 <img src="./readme_media/img-v6.jpg" />
 
 **Custom actions executed by the bot:**
@@ -58,7 +58,7 @@ You only need to do these 2 steps:
 
 Make sure the key name (`___changeBackground` in this example) is the same as the `func_name_param_pattern` in the `custom_functions` dictionary.
 
-<img src="readme_media/custom_bot_v4.png" /> 
+<img src="./readme_media/custom_bot_v4.png" /> 
 
 
 #### 2. Write your custom function:
@@ -92,9 +92,6 @@ You can add stuff like calling the HackerNews API and showing it on the screen s
 control the lights or toaster or whatever you want.
 
 
-
-
-
 ## 📝💪🏼 Write your own features:
 
 1. Define the function that will do the work. For example:
@@ -103,11 +100,11 @@ control the lights or toaster or whatever you want.
 
 2. Add a keyword that the bot can use to call this function
 
-<img src="readme_media/custom_bot_v2.png" /> <br/>
+<img src="./readme_media/custom_bot_v2.png" /> <br/>
 
 3. When you get a reply from the bot, see if any of your keywords is called, if yes, call your function:
 
-<img src="readme_media/custom_bot_v3.png" /> <br/>
+<img src="./readme_media/custom_bot_v3.png" /> <br/>
 
 
 
