@@ -58,7 +58,7 @@ You only need to do these 2 steps:
 
 Make sure the key name (`___changeBackground` in this example) is the same as the `func_name_param_pattern` in the `custom_functions` dictionary.
 
-<img src="./readme_media/custom_bot_v4.png" /> 
+<img src="./readme_media/custom_bot_v4.png" /> <br/>
 
 
 #### 2. Write your custom function:
@@ -71,10 +71,10 @@ There are 3 examples of custom code examples shown of how you can have the bot e
 
 
 - A very simple example that changes the background color of the page: <br/>
-<img src="readme_media/custom_bot_v5.png" /> <br/>
+<img src="./readme_media/custom_bot_v5.png" /> <br/>
 
 - A slightly more complex example that fetches the top X stories from Hacker News and shows it in the media tab: <br/>
-<img src="readme_media/custom_bot_v6.png" /> <br/> 
+<img src="./readme_media/custom_bot_v6.png" /> <br/> 
 
 
 
