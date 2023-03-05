@@ -20,7 +20,13 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 <br/>
 
 
-<img src="./readme_media/img-v4.jpg" />
+## Show me the goods:
+
+**Search and results using Chat:**
+<img src="./readme_media/img-v6.jpg" />
+
+**Custom actions executed by the bot:**
+<img src="./readme_media/img-v5.jpg" />
 
 
 ## 🤔 How to use:
@@ -40,10 +46,37 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 
 ## ⭐🤖🏃 Custom assistant:
 
-There are 2 very simple examples of custom code examples shown of how you can have the bot execute some functions for you.
+You can add your own custom actions to this bot very easily -- there are 3 examples of doing this in the code.
+
+
+You only need to do these 2 steps:
+1. Define the details of your custom action -- What function should be called, what is the name of the action etc.
+2. Write your custom function -- This is the function that will do the work.
+
+
+#### 1. Define the details of your custom action:
+
+Make sure the key name (`___changeBackground` in this example) is the same as the `func_name_param_pattern` in the `custom_functions` dictionary.
+
+<img src="readme_media/custom_bot_v4.png" /> 
+
+
+#### 2. Write your custom function:
+
+There are 3 examples of custom code examples shown of how you can have the bot execute some functions for you.
 
 1. Change the background color of the page --> you can say "change background to red" and the background will change to red.
 2. Change the text to white and it will change the text to white.
+3. Fetch the top X stories from Hacker News and show it in the media tab.
+
+
+- A very simple example that changes the background color of the page: <br/>
+<img src="readme_media/custom_bot_v5.png" /> <br/>
+
+- A slightly more complex example that fetches the top X stories from Hacker News and shows it in the media tab: <br/>
+<img src="readme_media/custom_bot_v6.png" /> <br/> 
+
+
 
 
 <video src='https://raw.githubusercontent.com/dminGod/CallGPT/main/callGPT.mov' />

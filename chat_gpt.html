@@ -6,11 +6,12 @@
 
     <!-- JQuery to make JavaScript a little simpler -->
     <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
     <!-- Bootstrap for styling and UI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 </head>
 <body>
 
@@ -38,11 +39,11 @@
 <!-- Top header end -->
 
 
-
 <div class="row">
 
     <!-- Left Section, Chatbox, tech selection, send button - start -->
     <div class="col-lg-9">
+
         <input type="text" id="chat_box" class="form-control" placeholder="Enter text here -- ctrl/command + enter to send the message" />
 
         <div class="row tech_selection">
@@ -64,12 +65,28 @@
                 <button class="btn btn-primary" id="send_button">Send</button>
             </div>
 
-            <!-- Chat box - start -->
-            <div class="row">
-                <div class="col-lg-12" id="chat_response"></div>
-            </div>
-            <!-- Chat box - end -->
+            <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-1">Chatbox</a></li>
+                        <li><a href="#tabs-2">Media Content</a></li>
+                    </ul>
 
+                <div id="tabs-1">
+                    <!-- Chat box - start -->
+                    <div class="row">
+                        <div class="col-lg-12" id="chat_response"></div>
+                    </div>
+                    <!-- Chat box - end -->
+                </div>
+
+                <div id="tabs-2">
+                    <!-- Media Tab - start -->
+                    <div class="row">
+                        <div class="col-lg-12" id="media_tab"></div>
+                    </div>
+                    <!-- Media Tab - end -->
+                </div>
+            </div>
         </div>
     </div>
     <!-- Left Section, Chatbox, tech selection, send button - end -->
@@ -79,30 +96,32 @@
 
         <!-- API Related Settings - start-->
         <div class="api_settings right_panel">
-            <h6>API Settings:</h6>
+            <h6>API Settings: <span class="min_max">Show / Hide</span></h6>
 
-            <div class="right_single_setting">
-                Model Name: <br/>
-                <select id="model_name">
-                    <option value="gpt-3.5-turbo">GPT 3.5 Turbo</option>
-                    <option value="gpt-3.5-turbo-0301">GPT 3.5 Turbo-0301</option>
-                </select>
-                    <br/>
-            </div>
+            <div class="wrapper">
+                <div class="right_single_setting">
+                    Model Name: <br/>
+                    <select id="model_name">
+                        <option value="gpt-3.5-turbo">GPT 3.5 Turbo</option>
+                        <option value="gpt-3.5-turbo-0301">GPT 3.5 Turbo-0301</option>
+                    </select>
+                        <br/>
+                </div>
 
-            <div class="right_single_setting">
-                Temprature: <span id="gpt_temprature_value">0.5</span> <small class="text pull_right">higher = more creative</small> <br/>
-                <input type="range" class="form-range" min="0" max="1" step="0.05" id="gpt_temprature">
-            </div>
+                <div class="right_single_setting">
+                    Temprature: <span id="gpt_temprature_value">0.5</span> <small class="text pull_right">higher = more creative</small> <br/>
+                    <input type="range" class="form-range" min="0" max="1" step="0.05" id="gpt_temprature">
+                </div>
 
-            <div class="right_single_setting">
-                Number of responses: <span id="n_gens">1</span> <small class="text pull_right">How many replies</small> <br/>
-                <input type="range" class="form-range" min="1" max="5" step="1" id="num_gens" value="1" />
-            </div>
+                <div class="right_single_setting">
+                    Number of responses: <span id="n_gens">1</span> <small class="text pull_right">How many replies</small> <br/>
+                    <input type="range" class="form-range" min="1" max="5" step="1" id="num_gens" value="1" />
+                </div>
 
-            <div class="right_single_setting">
-                <input type="checkbox" id="enable_max_tokens" /> Max Tokens: <span id="max_tokens">1</span> <small class="text pull_right">Max response tokens</small> <br/>
-                <input type="range" class="form-range" min="1" max="4096" step="10" id="num_tokens" value="4096" />
+                <div class="right_single_setting">
+                    <input type="checkbox" id="enable_max_tokens" /> Max Tokens: <span id="max_tokens">1</span> <small class="text pull_right">Max response tokens</small> <br/>
+                    <input type="range" class="form-range" min="1" max="4096" step="10" id="num_tokens" value="4096" />
+                </div>
             </div>
         </div>
         <!-- API Related Settings - end-->
@@ -110,29 +129,47 @@
 
         <!-- API Usage - start-->
         <div class="usage_reference right_panel">
-            <h6>API Usage:</h6>
-            <b>Last Call:</b> <br/>
+            <h6>API Usage Stats: <span class="min_max">Show / Hide</span></h6>
 
-            <span class="token_count_labels">Time taken: </span>        <span id="last_time_taken">0</span>       <br/>
+            <div class="wrapper">
+                <b>Last Call:</b> <br/>
 
-            <span class="token_count_labels">Prompt tokens: </span>        <span id="prompt_tokens">0</span>       <br/>
-            <span class="token_count_labels">Completion tokens: </span>    <span id="completion_tokens">0</span>   <br/>
-            <span class="token_count_labels"><b>Last call total:</b> </span>  <span id="total_tokens">0</span>     <br/>
-            <hr/>
+                <span class="token_count_labels">Time taken: </span>        <span id="last_time_taken">0</span>       <br/>
 
-            <b>This Session:</b> <br/>
+                <span class="token_count_labels">Prompt tokens: </span>        <span id="prompt_tokens">0</span>       <br/>
+                <span class="token_count_labels">Completion tokens: </span>    <span id="completion_tokens">0</span>   <br/>
+                <span class="token_count_labels"><b>Last call total:</b> </span>  <span id="total_tokens">0</span>     <br/>
+                <hr/>
 
-            <span class="token_count_labels">Avg response time: </span>        <span id="avg_time_taken">0</span>       <br/>
+                <b>This Session:</b> <br/>
 
-            <span class="token_count_labels">Prompt tokens: </span>            <span id="total_prompt_tokens">0</span> <br/>
-            <span class="token_count_labels">Completion tokens: </span>        <span id="total_completion_tokens">0</span> <br/>
-            <span class="token_count_labels"><b>Session total : </b></span>    <span id="total_session_tokens">0</span> </b> <br/>
+                <span class="token_count_labels">Avg response time: </span>        <span id="avg_time_taken">0</span>       <br/>
+
+                <span class="token_count_labels">Prompt tokens: </span>            <span id="total_prompt_tokens">0</span> <br/>
+                <span class="token_count_labels">Completion tokens: </span>        <span id="total_completion_tokens">0</span> <br/>
+                <span class="token_count_labels"><b>Session total : </b></span>    <span id="total_session_tokens">0</span> </b> <br/>
+            </div>
+        </div>
+        <!-- API Usage - end -->
+
+        <!-- API Usage - start-->
+        <div class="bot_plugins right_panel">
+            <h6>Chatbot actions available: <span class="min_max">Show / Hide</span></h6>
+
+            <div class="wrapper">
+                These are the things that this ChatBot can do. You can add your own actions too. See the docs for
+                more details.
+                <br/>
+
+                <div class="chat_actions_available_list">
+
+                </div>
+            </div>
         </div>
         <!-- API Usage - end -->
 
     </div>
         <!-- Right Section, Settings and Usage stats - end -->
-
 
 </div><!-- row div - end -->
 
@@ -142,33 +179,259 @@
 
 <!---
 --------------------------------------------------------------
-Custom JavaScript functions
+Modify these Custom JavaScript functions
 --------------------------------------------------------------
 -->
 <script type="text/javascript">
 
-    // Change the background:
-    function myCustomBgFunction(color) {
-        console.log("Got request to change the color: ", color)
+    // This is a list of the functions that the bot can call:
+    var custom_functions = {
+
+        "___changeBackground": {
+            // What function to call when GPT sends this command:
+            call_function: myCustomBgFunction,
+
+            // This is a name that the user will see as a heading:
+            action_name: "Change Background color",
+
+            // User description -- what to show to the user to describe this action:
+            user_description: "Change the background color of this page",
+
+            // Explanation to give to ChatGPT as to what this function does, so
+            // it can decide to call it when the user requests it:
+            // Eg: "Change the background color of the page, use values valid for jquery css in the parameter"
+            func_explanation: "Change the background color of the page, use values valid for jquery css in the parameter",
+
+            // Example of how the user will request this feature:
+            user_request_pattern: "change the background color to {color name}",
+
+            // Name and parameter pattern:
+            // This text is only used to tell ChatGPT how to call your function:
+            func_name_param_pattern : '___changeBackground({color name})'
+        },
+
+        "___changeText": {
+            // What function to call when GPT sends this command:
+            call_function: myCustomTextFunction,
+
+            // This is a name that the user will see as a heading:
+            action_name: "Change text color",
+
+            // User description -- what to show to the user to describe this action:
+            user_description: "Change the text color of this page",
+
+
+            // Explanation to give to ChatGPT as to what this function does, so
+            // it can decide to call it when the user requests it:
+            // Eg: "Change the background color of the page, use values valid for jquery css in the parameter"
+            func_explanation: "Change the text color of the page, use values valid for jquery css in the parameter",
+
+            // Example of how the user will request this feature:
+            user_request_pattern: "change the text color to {color name} or change the page text color to {color name}",
+
+            // This text is only used to tell ChatGPT how to call your function:
+            func_name_param_pattern : '___changeText({color name})'
+        },
+
+        "___myHNTopItems": {
+            // What function to call when GPT sends this command:
+            call_function: myHNTopItems,
+
+            // This is a name that the user will see as a heading:
+            action_name: "Top Hacker News stories",
+
+            // User description -- what to show to the user to describe this action:
+            user_description: "Fetch the top stories from Hacker News - by default 10 are shown, you can ask for upto 100.",
+
+
+            // Explanation to give to ChatGPT as to what this function does, so
+            // it can decide to call it when the user requests it:
+            // Eg: "Change the background color of the page, use values valid for jquery css in the parameter"
+            func_explanation: "The function will fetch the top number of stories requested by the user, 10 if not specified and upto 100 if requested.",
+
+            // Example of how the user will request this feature:
+            user_request_pattern: "get me the top {number} stories from hn or get me the top {number} hackernews or fetch hn top {number} stories",
+
+            // This text is only used to tell ChatGPT how to call your function:
+            func_name_param_pattern : '___myHNTopItems({number of stories})'
+        },
+
+        "___searchDuckDuckGo": {
+
+            // What function to call when GPT sends this command:
+            call_function: searchDuckDuckGoImages,
+
+            // This is a name that the user will see as a heading:
+            action_name: "DuckDuckGo Image Search",
+
+            // User description -- what to show to the user to describe this action:
+            user_description: "Search for images with a query and optionally specify how many images should be retuned.",
+
+            func_explanation: "This function searches DuckDuckGo for images and returns the first 10 images by default, or upto 100 if specified.",
+
+            user_request_pattern: "search for images for {query} or search duckduckgo for {query} images and return {number} images or show me {number} images for {query} or show me {number} images for {query}",
+        }
+    }
+
+    // These are the actual functions that will be called when GPT sends the command:
+    // the params will be split and passed to the function as an array:
+
+    // Change the page background color example:
+    function myCustomBgFunction(params) {
+
+        console.log("Got request to change the color, params are: ", params)
+
+        color = params[0]
         $("body").css("background-color", color);
     }
 
     // Change the text color:
-    function myCustomTextFunction(color) {
-        console.log("Got request to change the text color: ", color)
+    // Change the page text color example:
+    function myCustomTextFunction(params) {
+
+        console.log("Got request to change the text color, params are: ", params)
+
+        color = params[0]
         $("body").css("color", color);
     }
+
+    function myHNTopItems(count) {
+
+        if(count == undefined) {
+            count = 10;
+        }
+
+        if(count > 100) {
+            count = 100;
+        }
+
+        fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+            .then(response => response.json())
+            .then(data => {
+                const topArticleIds = data.slice(0, count); // Fetching top 10 articles
+                const articlePromises = topArticleIds.map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(response => response.json()));
+                Promise.all(articlePromises).then(articles => {
+
+                    console.log(articles); // Do something with the fetched articles
+
+                    tm = getCurrentTime();
+                    cont = `<h5>Top Hacker News Stories <span class="media_time">${tm}</span></h5>`;
+
+                    // Add the articles to the page:
+                    for (var i = 0; i < articles.length; i++) {
+                        article = articles[i];
+                        cont += `<div class="hn-article"><a href="${article.url}" target="_blank">${article.title} (${article.score})</a></div>`;
+                    }
+
+                    cont = `<div class="content_wrapper">${cont}</div>`;
+
+                    $("#media_tab").append(cont);
+
+                    // Switch to the media tab:
+                    $("#tabs").tabs("option", "active", 1);
+
+                });
+            });
+    }
+
+    // Search DuckDuckGo images:
+    function searchDuckDuckGoImages(query, count) {
+
+        // If no count is specified, default to 10
+        if (count === undefined) {
+            count = 15;
+        }
+
+        if (count > 100) {
+            count = 100;
+        }
+
+        // Set the API endpoint and search parameters
+        const endpoint = 'https://api.duckduckgo.com/';
+        const params = {
+            q: query,
+            format: 'json',
+            crossOrigin: true,
+            no_redirect: 1,
+            t: 'ffsb',
+            iax: 'images',
+            ia: 'images'
+        };
+
+        // Send the API request
+        $.getJSON(endpoint, params, function(data) {
+
+            // Loop over the results and display them on the page
+            const results = data.ImageResults;
+
+            htm = `<h5>Image Search results for ${query} <span class="media_time">${getCurrentTime()}</span></h5>`;
+
+            for (let i = 0; i < results.length; i++) {
+
+                const imageUrl = results[i].Image;
+                htm += `<img src="${imageUrl}" class="result_image">`;
+
+                if (i % 4 == 0) {
+                    htm += `<br/>`;
+                }
+            }
+
+            $("#media_tab").append(`<div class="content_wrapper">${htm}</div>`);
+
+        });
+    }
+
 </script>
 
 
-
-<!---
---------------------------------------------------------------
-Business logic of the app:
---------------------------------------------------------------
--->
-
 <script type="text/javascript">
+
+/*
+-----------------------------------------------
+Parse the commands sent by GPT to us
+------------------------------------------------
+*/
+
+// Handle commands sent by GPT
+function HandleGPTCommandRequest(gpt_response) {
+
+    console.log("Got a raw command request from GPT: ", gpt_response)
+
+    // For each custom_functions:
+    for (var key in custom_functions) {
+
+        // Check if the key is present in the response:
+        if (gpt_response.startsWith(key)) {
+
+            // Extract the parameters:
+            params = gpt_response.split("(")[1].split(")")[0]
+
+            // If there are multiple parameters, split them:
+            split_params = params.split(",")
+
+            // Loop and remove the enclosing quotes from each of the params:
+            for (var i = 0; i < split_params.length; i++) {
+                // Trim the starting " and ending " from the param:
+                split_params[i] = split_params[i].replace(/^"|"$/g, "");
+            }
+
+            // Log the call we are making and the parameters we are sending to it:
+            console.log("Calling the custom function:", custom_functions, "with these params:", split_params)
+
+            // Call the custom function:
+            custom_functions[key]["call_function"]( split_params );
+        }
+    }
+}
+
+
+/*
+--------------------------------------------------------------
+Business logic of the page:
+--------------------------------------------------------------
+*/
+
+// Helper functions:
 
     // Function to escape HTML characters:
     const escapeHtml = (unsafe) => {
@@ -184,11 +447,9 @@ Business logic of the app:
         return hours + ':' + minutes + ':' + seconds;
     }
 
-
     // This function converts a single response from ChatGPT to HTML format:
     formatResponse = (retMsg) => {
 
-        retMsg = escapeHtml(retMsg)
         single_lines = retMsg.split("\n")
 
         // Give additional capability to the bot -- very simple example of changing the page background and changeing the text color
@@ -198,25 +459,13 @@ Business logic of the app:
             // If the line starts with __changeBackground, then change the background color:
             if (single_lines[i].startsWith("___")) {
 
-                if (single_lines[i].startsWith("___changeBackground")) {
-                    // Get the color:
-                    color = single_lines[i].split("(")[1].split(")")[0]
-                    color = color.replaceAll('"', '')
-
-                    // Call the custom function:
-                    myCustomBgFunction(color)
-                }
-
-                if (single_lines[i].startsWith("___changeText")) {
-                    // Get the color:
-                    color = single_lines[i].split("(")[1].split(")")[0]
-                    color = color.replaceAll('"', '')
-
-                    // Call the custom function:
-                    myCustomTextFunction(color)
-                }
+                // We probably have some command that ChatGPT is trying to invoke, send
+                // it to the handler function:
+                HandleGPTCommandRequest(single_lines[i])
             }
         }
+
+        retMsg = escapeHtml(retMsg)
 
         // Any code within ```<something>``` should be replaced with <pre> <something> </pre>
         // TODO: This thing is not working properly, need to fix it:
@@ -231,13 +480,14 @@ Business logic of the app:
         return retMsg
     }
 
-
+    // Variables to track tokens:
     session_total_prompt_tokens = 0
     session_total_completion_tokens = 0
     session_total_tokens = 0
     session_time_taken_secs = 0
     session_calls_done = 0
     session_avg_time_taken = 0
+
 
     // ChatGPT API Call:
     function CallChatGPT() {
@@ -255,6 +505,9 @@ Business logic of the app:
             setTimeout(function(){ $("#status_message").css("color", "black"); $("#status_message").html(".") }, 4000)
             return;
         }
+
+        // Make the chat box tab active, incase the user was in the media tab:
+        $("#tabs").tabs("option", "active", 0);
 
         // Get the topic
         topic = $("input[name='topic']:checked").val()
@@ -289,6 +542,22 @@ Business logic of the app:
         // OpenAI URL:
         openai_url = "https://api.openai.com/v1/chat/completions"
 
+        // Build details of the user functions, so they can be used on the
+        // initialization of the bot:
+
+        custom_func_list_str = ""
+
+        // Loop over the custom_functions and build the text to send to ChatGPT:
+        for (var kk in custom_functions) {
+
+            cur_func = custom_functions[kk]
+
+            // text
+            custom_func_list_str += `function name & parameters: ${cur_func["func_name_param_pattern"]} | `
+            custom_func_list_str += `what it does: ${cur_func["func_explanation"]} | `
+            custom_func_list_str += `user usage example: ${cur_func["user_request_pattern"]} \n`
+        }
+
         // The actual message to send -- you can change this part if you want
         // as per your liking:
         msgs = [
@@ -296,14 +565,15 @@ Business logic of the app:
                 "role": "system",
                 // You can change this part to be whatever you want it to be 👇🏻
                 "content": `You are a helpful coding assistant and may be sometimes asked other questions and given tasks.
+
                 For the tasks you have a list of functions you can call (given below)
                 - To call a function, reply with ___<function name>(<parameters>) in a separate line
+                - In the list, you have details of:
+                    - The function name and the parameters it accepts
+                    - What the function does and an example of how the user may request the function (it's a broad outline - it may vary slightly by the the user)
                 - Please try to fulfil the request immediately rather than ask for more information
 
-                List:
-                ___changeBackground(<html color name>)   --  Change the background color of the page, use values valid for jquery css in the parameter
-                ___changeTextColor(<html color name>)    --  Change the text color, use values valid for jquery css
-                `
+                Custom function details:\n` + custom_func_list_str
             },
             {
                 "role": "user",
@@ -440,63 +710,128 @@ Business logic of the app:
                 $("#status_message").css("color", "black").html(".");
             }, 3000);
         })
-    }
+    };
 
-    send_request = function(){
+    send_request = function() {
 
         $("#status_message").html("<span class='sending'>Sending message...</span>")
 
         // The call to ChatGPT is made from this function:
         CallChatGPT()
+    };
+
+    // Side panel description of the available custom actions:
+    function buildCustomActionsList() {
+
+        // Build the custom actions list:
+        txt = ""
+
+        $.each(custom_functions, function(key, value) {
+
+            txt += `
+<hr/>
+                <b class="action_name">${value["action_name"]}</b>
+                <p>${value["user_description"]}</p>
+                <p>Example Usage:<br/> ${value["user_request_pattern"]}</p>
+`
+        });
+
+        // chat_actions_available_list
+        $(".chat_actions_available_list").html(txt)
     }
 
     // Wait for the page to load before we do anything
     $("document").ready(function() {
 
+        // Initialize the tabs:
+        $("#tabs").tabs();
+
+        // Set initial values from the sliders:
         $("#gpt_temprature_value").html($("#gpt_temprature").val())
         $("#n_gens").html($("#num_gens").val())
         $("#max_tokens").html($("#num_tokens").val())
 
+        // Make the list of action descriptions to show on the side panel:
+        buildCustomActionsList();
 
+        $(".min_max").click(function(){
+
+            console.log("Clicked on min/max button")
+            console.log("found elements: ", $(this).siblings(".wrapper"))
+            // Toggle visibility of the sibling called ".wrapper":
+            $(this).parent("h6").siblings(".wrapper").toggle();
+        });
+
+        // Capture change of sliders:
         $("#gpt_temprature").on("change", function() {
             $("#gpt_temprature_value").html($("#gpt_temprature").val())
-        })
+        });
 
         $("#num_gens").on("change", function() {
             $("#n_gens").html($("#num_gens").val())
-        })
+        });
 
         $("#num_tokens").on("change", function() {
             $("#max_tokens").html($("#num_tokens").val())
-        })
+        });
 
-
-        // If ctrl + enter is pressed and you are not focused on the text box
+        // If ctrl + enter is pressed anywhere on the page:
         $(document).keypress(function(e) {
-
             if ((e.keyCode == 10 || e.keyCode == 13) && (e.ctrlKey || e.metaKey)) {
-                // enter pressed
                 send_request();
             }
         });
 
-
-        $("#send_button").click(function(){
+        $("#send_button").click(function() {
             send_request();
         })
+
+        // Hide the API settings and usage reference:
+        $(".api_settings").find(".min_max").click();
+        $(".usage_reference").find(".min_max").click();
+
     });
 </script>
 
 
-
-
 <!-- Styling -->
-
 <style>
+
+    img.result_image {
+        max-width: 20%;
+    }
+
+    div.hn-article {
+        padding:4px;
+    }
+
+    span.media_time {
+        font-size: 10px;
+        color: gray;
+        float: right;
+    }
+
+    div.content_wrapper {
+        padding: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 10px;
+        border: thin solid #eeeeee;
+    }
 
     div.top-header{
         padding-top : 10px;
         padding-bottom: 10px;
+    }
+
+    b.action_name {
+        color: maroon;
+    }
+
+    span.min_max {
+        cursor: pointer;
+        float: right;
+        font-size: 10px;
     }
 
     span.menu_item {
@@ -605,5 +940,6 @@ Business logic of the app:
         overflow-y: scroll;
     }
 </style>
+
 </body>
 </html>
