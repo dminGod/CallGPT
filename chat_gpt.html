@@ -281,8 +281,20 @@ Modify these Custom JavaScript functions
 
         console.log("Got request to change the color, params are: ", params)
 
-        color = params[0]
-        $("body").css("background-color", color);
+        // Replace the starting and ending " with nothing:
+        params = params.replace(/^"|"$/g, "");
+
+        // We got a reference as rgb(0-255, 0-255, 0-255) so we need to convert it to hex:
+        if (params.includes("rgb")) {
+
+            // Extract the numbers values:
+            var rgb = params.match(/\d+/g);
+
+            // Convert to hex:
+            params = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+        }
+
+        $("body").css("background-color", params);
     }
 
     // Change the text color:
@@ -291,8 +303,20 @@ Modify these Custom JavaScript functions
 
         console.log("Got request to change the text color, params are: ", params)
 
-        color = params[0]
-        $("body").css("color", color);
+        // Replace the starting and ending " with nothing:
+        params = params.replace(/^"|"$/g, "");
+
+        // We got a reference as rgb(0-255, 0-255, 0-255) so we need to convert it to hex:
+        if (params.includes("rgb")) {
+
+            // Extract the numbers values:
+            var rgb = params.match(/\d+/g);
+
+            // Convert to hex:
+            params = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+        }
+
+        $("body").css("color", params);
     }
 
     function myHNTopItems(count) {
@@ -404,22 +428,19 @@ function HandleGPTCommandRequest(gpt_response) {
         if (gpt_response.startsWith(key)) {
 
             // Extract the parameters:
-            params = gpt_response.split("(")[1].split(")")[0]
+            // Split only the first occurence of "(":
+            let index = gpt_response.indexOf("("); // Get the index of the first (
+            let fn_name = gpt_response.substring(0, index); // Get the string before the first (
+            let params = gpt_response.substring(index); // Get the string starting from the first (
 
-            // If there are multiple parameters, split them:
-            split_params = params.split(",")
-
-            // Loop and remove the enclosing quotes from each of the params:
-            for (var i = 0; i < split_params.length; i++) {
-                // Trim the starting " and ending " from the param:
-                split_params[i] = split_params[i].replace(/^"|"$/g, "");
-            }
+            // Remove the first and last ( from the params:
+            params = params.replace(/^\(|\)$/g, "");
 
             // Log the call we are making and the parameters we are sending to it:
-            console.log("Calling the custom function:", custom_functions, "with these params:", split_params)
+            console.log("Calling the custom function:", custom_functions, "with these params:", params)
 
             // Call the custom function:
-            custom_functions[key]["call_function"]( split_params );
+            custom_functions[key]["call_function"]( params );
         }
     }
 }
