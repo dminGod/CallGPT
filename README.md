@@ -82,7 +82,7 @@ There are 3 examples of custom code examples shown of how you can have the bot e
 
   ![complex example](./readme_media/custom_bot_v6.png)
 
-  <video src="https://raw.githubusercontent.com/dminGod/CallGPT/main/readme_media/callGPT.mov" controls/>
+  <video src="https://raw.githubusercontent.com/dminGod/CallGPT/main/readme_media/callGPT.mov" controls></video>
 
 To add more capabilities to the Bot:
 
