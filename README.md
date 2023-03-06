@@ -18,17 +18,15 @@ This is a dead simple way to have a ChatGPT client that you have control over an
 
 - You will need to use an API key from OpenAI. The API is fairly cheap, but nevertheless a paid service.
 
-<br/>
-
 ## Show me the goods
 
 **Chat and responses:**
 
-<img src="./readme_media/img-v6.jpg" />
+![Chat and responses](./readme_media/img-v6.jpg)
 
 **Custom actions executed by the bot:**
 
-<img src="./readme_media/img-v5.jpg" />
+![Custom actions executed by the bot](./readme_media/img-v5.jpg)
 
 ## 🤔 How to use
 
