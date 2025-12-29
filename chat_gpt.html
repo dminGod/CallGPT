@@ -63,6 +63,7 @@
 
             <div class="col-lg-3">
                 <button class="btn btn-primary" id="send_button">Send</button>
+                <button class="btn btn-secondary" id="clear_chat_button">Clear Chat</button>
             </div>
 
             <div id="tabs">
@@ -808,6 +809,13 @@ Business logic of the page:
             send_request();
         })
 
+        $("#clear_chat_button").click(function() {
+            $("#chat_response").html("");
+            $("#media_tab").html("");
+            $("#status_message").html("Chat cleared!");
+            setTimeout(function(){ $("#status_message").html("."); }, 2000);
+        })
+
         // Hide the API settings and usage reference:
         $(".api_settings").find(".min_max").click();
         $(".usage_reference").find(".min_max").click();
@@ -923,7 +931,11 @@ Business logic of the page:
 
     #send_button {
         float:right;
+        margin-left: 5px;
+    }
 
+    #clear_chat_button {
+        float:right;
     }
 
     small {
